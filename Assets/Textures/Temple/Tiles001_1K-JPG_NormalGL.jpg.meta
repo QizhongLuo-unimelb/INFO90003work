@@ -1,0 +1,42 @@
+fileFormatVersion: 2
+guid: 0baceace88ec4141ba8879db07a4d230
+TextureImporter:
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    sRGBTexture: 0
+    linearTexture: 1
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 1
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  textureType: 1
+  textureShape: 1
+  alphaSource: 1
+  sRGBTexture: 0
+  textureCompression: 1
+  maxTextureSize: 2048
+  filterMode: 1
+  aniso: 1
+  wrapU: 0
+  wrapV: 0
+  wrapW: 0
+  nPOTScale: 1
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

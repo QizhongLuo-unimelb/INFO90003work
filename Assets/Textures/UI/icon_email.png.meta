@@ -1,0 +1,34 @@
+fileFormatVersion: 2
+guid: 49409a3ea2564985a99bdc61fc8c67df
+TextureImporter:
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+  isReadable: 0
+  textureType: 8
+  spriteMode: 1
+  spritePixelsToUnits: 100
+  alphaSource: 1
+  alphaIsTransparency: 1
+  textureCompression: 1
+  maxTextureSize: 512
+  filterMode: 1
+  wrapU: 1
+  wrapV: 1
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 512
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites: []
+    spriteID: 5e97eb03825dee720800000000000000
+  userData: Tabler Icons mail, MIT License, source https://github.com/tabler/tabler-icons
+  assetBundleName: 
+  assetBundleVariant: 
