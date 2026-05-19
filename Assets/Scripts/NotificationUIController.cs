@@ -4,17 +4,24 @@ using UnityEngine.UI;
 
 public class NotificationUIController : MonoBehaviour
 {
-    const float PanelWidth = 960f;
-    const float PanelHeight = 200f;
-    const float IconSize = 62f;
-    const float LeftPadding = 34f;
-    const float RightPadding = 34f;
-    const float TextLeft = 120f;
-    const float TopPadding = 28f;
-    const float TitleHeight = 34f;
-    const float MessageTop = 72f;
-    const float MessageHeight = 104f;
-    const float TimeWidth = 96f;
+    const float PanelMinWidth = 520f;
+    const float PanelMaxWidth = 900f;
+    const float PanelMinHeight = 132f;
+    const float PanelMaxHeight = 360f;
+    const float HorizontalPadding = 46f;
+    const float HeaderHeight = 64f;
+    const float BodyTopPadding = 22f;
+    const float BottomPadding = 28f;
+    const float IconSize = 38f;
+    const float IconTitleGap = 14f;
+    const float BorderThickness = 8f;
+    const float HeaderDividerThickness = 4f;
+
+    static readonly Color MinecraftWoodColor = new Color(0.72f, 0.42f, 0.18f, 0.96f);
+    static readonly Color MinecraftWoodDarkColor = new Color(0.18f, 0.09f, 0.035f, 1f);
+    static readonly Color MinecraftWoodSideColor = new Color(0.48f, 0.25f, 0.10f, 1f);
+    static readonly Color MinecraftWoodLineColor = new Color(0.10f, 0.055f, 0.025f, 1f);
+    static readonly Color MinecraftTextColor = Color.white;
 
     [Header("UI References")]
     public RectTransform notificationPanel;
@@ -23,19 +30,31 @@ public class NotificationUIController : MonoBehaviour
     public TMP_Text messageText;
     public TMP_Text timeText;
 
+    [Header("Minecraft Style")]
+    public TMP_FontAsset minecraftFont;
+
     [Header("Icons")]
     public Sprite emailIcon;
     public Sprite gameIcon;
     public Sprite shoppingIcon;
     public Sprite defaultIcon;
 
+    Image backgroundImage;
+    RectTransform topBorder;
+    RectTransform bottomBorder;
+    RectTransform leftBorder;
+    RectTransform rightBorder;
+    RectTransform plankLine;
+
     void Awake()
     {
+        LoadMinecraftFont();
         ApplyLayout();
     }
 
     void OnValidate()
     {
+        LoadMinecraftFont();
         ApplyLayout();
     }
 
@@ -80,7 +99,7 @@ public class NotificationUIController : MonoBehaviour
 
         if (timeText != null)
         {
-            timeText.text = "now";
+            timeText.text = "";
         }
 
         if (iconImage != null)
@@ -90,6 +109,8 @@ public class NotificationUIController : MonoBehaviour
             iconImage.color = Color.white;
             iconImage.preserveAspect = true;
         }
+
+        ApplyLayout();
     }
 
     NotificationKind ResolveKind(StepNode node)
@@ -174,60 +195,75 @@ public class NotificationUIController : MonoBehaviour
 
     void ApplyLayout()
     {
+        LoadMinecraftFont();
+        EnsureWoodFrame();
+        ConfigureText(titleText, TextAlignmentOptions.MidlineLeft, TextWrappingModes.NoWrap, 30f, 0f);
+        ConfigureText(messageText, TextAlignmentOptions.Top, TextWrappingModes.Normal, 32f, -4f);
+        ConfigureText(timeText, TextAlignmentOptions.Center, TextWrappingModes.NoWrap, 1f, 0f);
+
+        Vector2 panelSize = CalculatePanelSize();
+
         if (notificationPanel != null)
         {
-            notificationPanel.anchorMin = new Vector2(0.5f, 1f);
-            notificationPanel.anchorMax = new Vector2(0.5f, 1f);
-            notificationPanel.pivot = new Vector2(0.5f, 1f);
-            notificationPanel.anchoredPosition = new Vector2(0f, -32f);
-            notificationPanel.sizeDelta = new Vector2(PanelWidth, PanelHeight);
+            notificationPanel.anchorMin = new Vector2(0.5f, 0.5f);
+            notificationPanel.anchorMax = new Vector2(0.5f, 0.5f);
+            notificationPanel.pivot = new Vector2(0.5f, 0.5f);
+            notificationPanel.anchoredPosition = Vector2.zero;
+            notificationPanel.sizeDelta = panelSize;
+
+            if (backgroundImage != null)
+            {
+                backgroundImage.color = MinecraftWoodColor;
+                backgroundImage.raycastTarget = false;
+            }
         }
+
+        ApplyWoodFrameLayout();
 
         RectTransform iconRect = iconImage != null ? iconImage.rectTransform : null;
         if (iconRect != null)
         {
+            iconImage.enabled = iconImage.sprite != null;
             iconImage.color = Color.white;
             iconImage.preserveAspect = true;
             iconRect.anchorMin = new Vector2(0f, 1f);
             iconRect.anchorMax = new Vector2(0f, 1f);
-            iconRect.pivot = new Vector2(0f, 1f);
-            iconRect.anchoredPosition = new Vector2(LeftPadding, -56f);
+            iconRect.pivot = new Vector2(0f, 0.5f);
+            iconRect.anchoredPosition = new Vector2(HorizontalPadding, -HeaderHeight * 0.5f);
             iconRect.sizeDelta = new Vector2(IconSize, IconSize);
         }
 
         RectTransform timeRect = timeText != null ? timeText.rectTransform : null;
         if (timeRect != null)
         {
-            timeRect.anchorMin = new Vector2(1f, 1f);
-            timeRect.anchorMax = new Vector2(1f, 1f);
-            timeRect.pivot = new Vector2(1f, 1f);
-            timeRect.anchoredPosition = new Vector2(-RightPadding, -TopPadding);
-            timeRect.sizeDelta = new Vector2(TimeWidth, 28f);
+            timeText.text = "";
+            timeRect.anchorMin = new Vector2(0.5f, 0.5f);
+            timeRect.anchorMax = new Vector2(0.5f, 0.5f);
+            timeRect.pivot = new Vector2(0.5f, 0.5f);
+            timeRect.anchoredPosition = Vector2.zero;
+            timeRect.sizeDelta = Vector2.zero;
         }
 
         RectTransform titleRect = titleText != null ? titleText.rectTransform : null;
         if (titleRect != null)
         {
             titleRect.anchorMin = new Vector2(0f, 1f);
-            titleRect.anchorMax = new Vector2(0f, 1f);
-            titleRect.pivot = new Vector2(0f, 1f);
-            titleRect.anchoredPosition = new Vector2(TextLeft, -TopPadding);
-            titleRect.sizeDelta = new Vector2(PanelWidth - TextLeft - RightPadding - TimeWidth - 12f, TitleHeight);
+            titleRect.anchorMax = new Vector2(1f, 1f);
+            titleRect.pivot = new Vector2(0.5f, 0.5f);
+            titleRect.anchoredPosition = new Vector2((IconSize + IconTitleGap) * 0.5f, -HeaderHeight * 0.5f);
+            titleRect.sizeDelta = new Vector2(-(HorizontalPadding * 2f + IconSize + IconTitleGap), HeaderHeight);
         }
 
         RectTransform messageRect = messageText != null ? messageText.rectTransform : null;
         if (messageRect != null)
         {
             messageRect.anchorMin = new Vector2(0f, 1f);
-            messageRect.anchorMax = new Vector2(0f, 1f);
-            messageRect.pivot = new Vector2(0f, 1f);
-            messageRect.anchoredPosition = new Vector2(TextLeft, -MessageTop);
-            messageRect.sizeDelta = new Vector2(PanelWidth - TextLeft - RightPadding, MessageHeight);
+            messageRect.anchorMax = new Vector2(1f, 1f);
+            messageRect.pivot = new Vector2(0.5f, 1f);
+            messageRect.anchoredPosition = new Vector2(0f, -(HeaderHeight + BodyTopPadding));
+            messageRect.sizeDelta = new Vector2(-HorizontalPadding * 2f, panelSize.y - HeaderHeight - BodyTopPadding - BottomPadding);
         }
 
-        ConfigureText(titleText, TextAlignmentOptions.Left, TextWrappingModes.NoWrap, 21f, 0f);
-        ConfigureText(messageText, TextAlignmentOptions.TopLeft, TextWrappingModes.Normal, 25f, -7f);
-        ConfigureText(timeText, TextAlignmentOptions.Right, TextWrappingModes.NoWrap, 17f, 0f);
     }
 
     void ConfigureText(TMP_Text text, TextAlignmentOptions alignment, TextWrappingModes wrapping, float fontSize, float lineSpacing)
@@ -240,8 +276,109 @@ public class NotificationUIController : MonoBehaviour
         text.alignment = alignment;
         text.textWrappingMode = wrapping;
         text.fontSize = fontSize;
+        text.enableAutoSizing = true;
+        text.fontSizeMin = Mathf.Max(18f, fontSize - 10f);
+        text.fontSizeMax = fontSize;
         text.lineSpacing = lineSpacing;
+        text.color = MinecraftTextColor;
+        text.fontStyle = FontStyles.Normal;
+        text.outlineWidth = 0.14f;
+        text.outlineColor = Color.black;
+        if (minecraftFont != null)
+        {
+            text.font = minecraftFont;
+        }
         text.margin = Vector4.zero;
         text.raycastTarget = false;
+    }
+
+    void LoadMinecraftFont()
+    {
+        if (minecraftFont == null)
+        {
+            minecraftFont = Resources.Load<TMP_FontAsset>("Fonts & Materials/Unity SDF");
+        }
+    }
+
+    Vector2 CalculatePanelSize()
+    {
+        float maxTextWidth = PanelMaxWidth - HorizontalPadding * 2f;
+        float headerTextOffset = IconSize + IconTitleGap;
+        float preferredWidth = PanelMinWidth - HorizontalPadding * 2f;
+        float messageHeight = 42f;
+
+        if (titleText != null)
+        {
+            titleText.ForceMeshUpdate();
+            preferredWidth = Mathf.Max(preferredWidth, titleText.GetPreferredValues(titleText.text, 0f, 0f).x + headerTextOffset);
+        }
+
+        if (messageText != null)
+        {
+            messageText.ForceMeshUpdate();
+            preferredWidth = Mathf.Max(preferredWidth, Mathf.Min(messageText.GetPreferredValues(messageText.text, 0f, 0f).x, maxTextWidth));
+        }
+
+        float width = Mathf.Clamp(preferredWidth + HorizontalPadding * 2f, PanelMinWidth, PanelMaxWidth);
+        if (messageText != null)
+        {
+            messageHeight = Mathf.Max(messageHeight, messageText.GetPreferredValues(messageText.text, width - HorizontalPadding * 2f, 0f).y);
+        }
+
+        float height = HeaderHeight + BodyTopPadding + BottomPadding + messageHeight;
+        return new Vector2(width, Mathf.Clamp(height, PanelMinHeight, PanelMaxHeight));
+    }
+
+    void EnsureWoodFrame()
+    {
+        if (notificationPanel == null)
+        {
+            return;
+        }
+
+        backgroundImage = notificationPanel.GetComponent<Image>();
+        topBorder = EnsurePanelStripe("MC Top Edge", MinecraftWoodDarkColor);
+        bottomBorder = EnsurePanelStripe("MC Bottom Edge", MinecraftWoodDarkColor);
+        leftBorder = EnsurePanelStripe("MC Left Edge", MinecraftWoodSideColor);
+        rightBorder = EnsurePanelStripe("MC Right Edge", MinecraftWoodSideColor);
+        plankLine = EnsurePanelStripe("MC Plank Line", MinecraftWoodLineColor);
+    }
+
+    RectTransform EnsurePanelStripe(string childName, Color color)
+    {
+        Transform existing = notificationPanel.Find(childName);
+        GameObject stripeObject = existing != null ? existing.gameObject : new GameObject(childName, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        RectTransform stripeRect = stripeObject.GetComponent<RectTransform>();
+        Image stripeImage = stripeObject.GetComponent<Image>();
+
+        stripeObject.transform.SetParent(notificationPanel, false);
+        stripeObject.transform.SetAsFirstSibling();
+        stripeImage.color = color;
+        stripeImage.raycastTarget = false;
+
+        return stripeRect;
+    }
+
+    void ApplyWoodFrameLayout()
+    {
+        SetEdge(topBorder, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), Vector2.zero, new Vector2(0f, BorderThickness));
+        SetEdge(bottomBorder, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0.5f, 0f), Vector2.zero, new Vector2(0f, BorderThickness));
+        SetEdge(leftBorder, new Vector2(0f, 0f), new Vector2(0f, 1f), new Vector2(0f, 0.5f), Vector2.zero, new Vector2(BorderThickness, 0f));
+        SetEdge(rightBorder, new Vector2(1f, 0f), new Vector2(1f, 1f), new Vector2(1f, 0.5f), Vector2.zero, new Vector2(BorderThickness, 0f));
+        SetEdge(plankLine, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -HeaderHeight), new Vector2(0f, HeaderDividerThickness));
+    }
+
+    void SetEdge(RectTransform rect, Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot, Vector2 anchoredPosition, Vector2 sizeDelta)
+    {
+        if (rect == null)
+        {
+            return;
+        }
+
+        rect.anchorMin = anchorMin;
+        rect.anchorMax = anchorMax;
+        rect.pivot = pivot;
+        rect.anchoredPosition = anchoredPosition;
+        rect.sizeDelta = sizeDelta;
     }
 }
