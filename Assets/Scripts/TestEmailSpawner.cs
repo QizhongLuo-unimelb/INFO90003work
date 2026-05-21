@@ -10,10 +10,10 @@ public class TestEmailSpawner : MonoBehaviour
     public Vector3 initialVelocity = new Vector3(0f, -1.5f, 0f);
 
     [Header("Timing")]
-    public float initialSpawnInterval = 1.4f;
-    public float minimumSpawnInterval = 0.08f;
-    public float accelerationRate = 0.94f;
-    public int maxSpawnedEmails = 180;
+    public float initialSpawnInterval = 0.32f;
+    public float minimumSpawnInterval = 0.12f;
+    public float accelerationRate = 0.985f;
+    public int maxSpawnedEmails = 320;
 
     bool isSpawning;
     float timer;

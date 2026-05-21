@@ -4,8 +4,8 @@ public class TestExperienceController : MonoBehaviour
 {
     [Header("Phase Timing")]
     public float flowDuration = 3f;
-    public float influxDuration = 12f;
-    public float suffocationDuration = 10f;
+    public float influxDuration = 15f;
+    public float suffocationDuration = 12f;
 
     [Header("Scene References")]
     public TestEmailSpawner emailSpawner;
@@ -14,6 +14,8 @@ public class TestExperienceController : MonoBehaviour
     public Camera sceneCamera;
     public Renderer[] treeRenderers;
     public Renderer[] pollutionRenderers;
+    public TestPollutableGrassField grassField;
+    public TestMailPopupUI popupUI;
 
     [Header("Tree Colors")]
     public Color healthyLeafColor = new Color(0.16f, 0.78f, 0.28f, 1f);
@@ -30,12 +32,10 @@ public class TestExperienceController : MonoBehaviour
     public Color calmSkyColor = new Color(0.38f, 0.64f, 0.92f, 1f);
     public Color overloadSkyColor = new Color(0.12f, 0.18f, 0.24f, 1f);
 
-    [Header("Mail Read Relief")]
-    public float reliefSecondsPerRead = 0.65f;
-    public float maxReadReliefSeconds = 8f;
+    [Header("Unread Pollution")]
+    public float unreadPressureForMaxPollution = 18f;
 
     float elapsed;
-    float readReliefSeconds;
     MaterialPropertyBlock propertyBlock;
 
     void Start()
@@ -69,11 +69,15 @@ public class TestExperienceController : MonoBehaviour
             emailSpawner.SetSpawning(shouldSpawn);
         }
 
-        float decayElapsed = Mathf.Max(0f, elapsed - readReliefSeconds);
-        float decay = Mathf.InverseLerp(influxStart, suffocationStart + suffocationDuration, decayElapsed);
+        float decay = GetUnreadPollutionProgress();
         if (leafAtrophy != null)
         {
             leafAtrophy.SetDecayProgress(decay);
+        }
+
+        if (grassField != null)
+        {
+            grassField.SetPollutionProgress(decay);
         }
 
         ApplyAtmosphere(decay);
@@ -81,12 +85,7 @@ public class TestExperienceController : MonoBehaviour
 
     public void ApplyReadRelief(int readMessages)
     {
-        if (readMessages <= 0)
-        {
-            return;
-        }
-
-        readReliefSeconds = Mathf.Min(maxReadReliefSeconds, readReliefSeconds + readMessages * reliefSecondsPerRead);
+        // Reading visible mail prevents it from becoming unread, which prevents extra pollution.
     }
 
     void ApplyAtmosphere(float decay)
@@ -164,5 +163,30 @@ public class TestExperienceController : MonoBehaviour
                 pollutionRenderers = pollutionRoot.GetComponentsInChildren<Renderer>(true);
             }
         }
+
+        if (grassField == null)
+        {
+            grassField = FindFirstObjectByType<TestPollutableGrassField>();
+        }
+
+        if (popupUI == null)
+        {
+            popupUI = TestMailPopupUI.Instance;
+        }
+    }
+
+    float GetUnreadPollutionProgress()
+    {
+        if (popupUI == null)
+        {
+            popupUI = TestMailPopupUI.Instance;
+        }
+
+        if (popupUI == null)
+        {
+            return 0f;
+        }
+
+        return Mathf.Clamp01(popupUI.UnreadCount / Mathf.Max(1f, unreadPressureForMaxPollution));
     }
 }

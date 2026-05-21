@@ -876,9 +876,72 @@ Transform:
   m_Children:
   - {fileID: 2035288681}
   - {fileID: 872650139}
+  - {fileID: 222222139}
   - {fileID: 1799621881}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &222222138
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1128528720}
+    m_Modifications:
+    - target: {fileID: 100000, guid: 4ab63862b97b64af3a2ad4e03f010e7c, type: 3}
+      propertyPath: m_Name
+      value: Pollutable_Grass_Field
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: 4ab63862b97b64af3a2ad4e03f010e7c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: 4ab63862b97b64af3a2ad4e03f010e7c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: 4ab63862b97b64af3a2ad4e03f010e7c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: 4ab63862b97b64af3a2ad4e03f010e7c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: 4ab63862b97b64af3a2ad4e03f010e7c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: 4ab63862b97b64af3a2ad4e03f010e7c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: 4ab63862b97b64af3a2ad4e03f010e7c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: 4ab63862b97b64af3a2ad4e03f010e7c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: 4ab63862b97b64af3a2ad4e03f010e7c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: 4ab63862b97b64af3a2ad4e03f010e7c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4ab63862b97b64af3a2ad4e03f010e7c, type: 3}
+--- !u!4 &222222139 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 100001, guid: 4ab63862b97b64af3a2ad4e03f010e7c, type: 3}
+  m_PrefabInstance: {fileID: 222222138}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1460344282
 GameObject:
   m_ObjectHideFlags: 0
@@ -1019,9 +1082,9 @@ MonoBehaviour:
   spawnZoneSize: {x: 7.2, y: 1.4, z: 5.8}
   initialVelocity: {x: 0.04, y: -8.6, z: 0}
   initialSpawnInterval: 0.32
-  minimumSpawnInterval: 0.035
-  accelerationRate: 0.95
-  maxSpawnedEmails: 220
+  minimumSpawnInterval: 0.12
+  accelerationRate: 0.985
+  maxSpawnedEmails: 320
 --- !u!1 &1830821856
 GameObject:
   m_ObjectHideFlags: 0
@@ -1052,8 +1115,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestExperienceController
   flowDuration: 3
-  influxDuration: 12
-  suffocationDuration: 10
+  influxDuration: 15
+  suffocationDuration: 12
   emailSpawner: {fileID: 1799621882}
   leafAtrophy: {fileID: 2035288705}
   keyLight: {fileID: 985252467}

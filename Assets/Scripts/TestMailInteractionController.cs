@@ -10,7 +10,7 @@ public class TestMailInteractionController : MonoBehaviour
     public string returnSceneName = "Main game";
 
     [Header("Timing")]
-    public float countdownSeconds = 20f;
+    public float countdownSeconds = 30f;
 
     [Header("References")]
     public TestMailPopupUI popupUI;
