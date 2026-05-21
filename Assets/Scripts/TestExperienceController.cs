@@ -26,7 +26,16 @@ public class TestExperienceController : MonoBehaviour
     public Color flowLightColor = new Color(0.72f, 0.95f, 0.78f, 1f);
     public Color overloadLightColor = new Color(1f, 0.48f, 0.42f, 1f);
 
+    [Header("Minecraft Atmosphere")]
+    public Color calmSkyColor = new Color(0.38f, 0.64f, 0.92f, 1f);
+    public Color overloadSkyColor = new Color(0.12f, 0.18f, 0.24f, 1f);
+
+    [Header("Mail Read Relief")]
+    public float reliefSecondsPerRead = 0.65f;
+    public float maxReadReliefSeconds = 8f;
+
     float elapsed;
+    float readReliefSeconds;
     MaterialPropertyBlock propertyBlock;
 
     void Start()
@@ -38,6 +47,12 @@ public class TestExperienceController : MonoBehaviour
         {
             emailSpawner.ResetSpawnRate();
             emailSpawner.SetSpawning(false);
+        }
+
+        if (sceneCamera != null)
+        {
+            sceneCamera.clearFlags = CameraClearFlags.Skybox;
+            sceneCamera.backgroundColor = calmSkyColor;
         }
     }
 
@@ -54,13 +69,24 @@ public class TestExperienceController : MonoBehaviour
             emailSpawner.SetSpawning(shouldSpawn);
         }
 
-        float decay = Mathf.InverseLerp(influxStart, suffocationStart + suffocationDuration, elapsed);
+        float decayElapsed = Mathf.Max(0f, elapsed - readReliefSeconds);
+        float decay = Mathf.InverseLerp(influxStart, suffocationStart + suffocationDuration, decayElapsed);
         if (leafAtrophy != null)
         {
             leafAtrophy.SetDecayProgress(decay);
         }
 
         ApplyAtmosphere(decay);
+    }
+
+    public void ApplyReadRelief(int readMessages)
+    {
+        if (readMessages <= 0)
+        {
+            return;
+        }
+
+        readReliefSeconds = Mathf.Min(maxReadReliefSeconds, readReliefSeconds + readMessages * reliefSecondsPerRead);
     }
 
     void ApplyAtmosphere(float decay)
@@ -73,7 +99,8 @@ public class TestExperienceController : MonoBehaviour
 
         if (sceneCamera != null)
         {
-            sceneCamera.backgroundColor = Color.Lerp(new Color(0.015f, 0.018f, 0.025f, 1f), new Color(0.005f, 0.002f, 0.002f, 1f), decay);
+            sceneCamera.clearFlags = CameraClearFlags.Skybox;
+            sceneCamera.backgroundColor = Color.Lerp(calmSkyColor, overloadSkyColor, decay);
             sceneCamera.fieldOfView = Mathf.Lerp(46f, 36f, decay);
         }
 

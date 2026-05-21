@@ -287,6 +287,7 @@ public class NotificationUIController : MonoBehaviour
         if (minecraftFont != null)
         {
             text.font = minecraftFont;
+            text.fontSharedMaterial = minecraftFont.material;
         }
         text.margin = Vector4.zero;
         text.raycastTarget = false;
@@ -296,7 +297,7 @@ public class NotificationUIController : MonoBehaviour
     {
         if (minecraftFont == null)
         {
-            minecraftFont = Resources.Load<TMP_FontAsset>("Fonts & Materials/Unity SDF");
+            minecraftFont = Resources.Load<TMP_FontAsset>("Fonts & Materials/LiberationSans SDF");
         }
     }
 
