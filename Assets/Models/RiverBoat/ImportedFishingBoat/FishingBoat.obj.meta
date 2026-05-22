@@ -1,0 +1,42 @@
+fileFormatVersion: 2
+guid: 4468588919cb4a99b0a3ca57465f3be1
+ModelImporter:
+  serializedVersion: 22200
+  internalIDToNameTable: []
+  externalObjects: {}
+  materials:
+    materialImportMode: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    importAnimation: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importBlendShapeDeformPercent: 1
+  importConstraints: 0
+  useFileUnits: 1
+  bakeAxisConversion: 0
+  preserveHierarchy: 0
+  indexFormat: 0
+  fileIDToRecycleName: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

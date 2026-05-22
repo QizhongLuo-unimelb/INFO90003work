@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7853439815232617594
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5727422513018947561}
+  - component: {fileID: 3195876455924013425}
+  m_Layer: 0
+  m_Name: shopping infomation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5727422513018947561
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7853439815232617594}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3195876455924013425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7853439815232617594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46e519ed80b947a79c51fa43738a42e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShoppingInformationDistraction
+  xRange: {x: -10.5, y: 10.5}
+  northBankZ: 3.85
+  southBankZ: -3.85
+  shoreSurfaceY: 0.5
+  bottomClearance: 0.12
+  spawnInterval: 2.4
+  maxVisibleMessages: 4
+  messageLifetime: 5.8
+  minimumSpacing: 4.5
+  popupSize: {x: 360, y: 210}
+  worldScale: 0.0065
+  popInDuration: 0.22
+  popOutDuration: 0.28
+  floatAmplitude: 0.045
+  cardColor: {r: 1, g: 0.985, b: 0.94, a: 1}
+  headerColor: {r: 0.93, g: 0.07, b: 0.12, a: 1}
+  discountColor: {r: 1, g: 0.78, b: 0.03, a: 1}
+  textColor: {r: 0.06, g: 0.06, b: 0.07, a: 1}
+  mutedTextColor: {r: 0.43, g: 0.43, b: 0.45, a: 1}
+  buttonColor: {r: 0.03, g: 0.55, b: 0.28, a: 1}
+  shadowColor: {r: 0, g: 0, b: 0, a: 0.3}
+  sellers:
+  - PixelMart
+  - BlockBay
+  - CartCraft
+  - MineMall
+  - FlashBox
+  - DealDock
+  products:
+  - Noise-Cancel Headset
+  - Cherry Keyboard
+  - Smart Watch
+  - Gaming Mouse
+  - USB-C Hub
+  - Cloud Sneakers
+  - Energy Drink Pack
+  - Mystery Loot Box
+  discounts:
+  - 44% OFF
+  - 35% OFF
+  - 50% OFF
+  - $15 OFF
+  - DEAL
+  - FLASH SALE

@@ -21,8 +21,14 @@ public class RiverBoatGameController : MonoBehaviour
     public float endSwayAmplitude = 2.8f;
     public float distractionReachSeconds = 15f;
     public float swayFrequency = 0.25f;
-    public float maxRollAngle = 24f;
-    public float maxYawAngle = 12f;
+    public float maxRollAngle = 14f;
+    public float maxYawAngle = 8f;
+
+    [Header("Focus Input")]
+    public KeyCode focusKey = KeyCode.M;
+    public float focusReturnSpeed = 6f;
+    public float normalSwayFollowSpeed = 4f;
+    public float focusedTiltMultiplier = 0.25f;
 
     [Header("Finish")]
     public string returnSceneName = "Main game";
@@ -30,6 +36,7 @@ public class RiverBoatGameController : MonoBehaviour
 
     float elapsed;
     float finishElapsed;
+    float currentSway;
     bool finished;
 
     void Awake()
@@ -75,13 +82,21 @@ public class RiverBoatGameController : MonoBehaviour
 
         float distractionProgress = Mathf.Clamp01(elapsed / Mathf.Max(0.01f, distractionReachSeconds));
         float amplitude = Mathf.Lerp(startSwayAmplitude, endSwayAmplitude, distractionProgress);
-        float sway = Mathf.Sin(elapsed * swayFrequency * Mathf.PI * 2f) * amplitude;
-        float roll = -Mathf.Sin(elapsed * swayFrequency * Mathf.PI * 2f) * maxRollAngle * distractionProgress;
-        float yaw = Mathf.Cos(elapsed * swayFrequency * Mathf.PI * 2f) * maxYawAngle * distractionProgress;
+        float swayWave = Mathf.Sin(elapsed * swayFrequency * Mathf.PI * 2f);
+        bool isFocusing = Input.GetKey(focusKey);
+        float targetSway = isFocusing ? 0f : swayWave * amplitude;
+        float swayFollowSpeed = isFocusing ? focusReturnSpeed : normalSwayFollowSpeed;
+
+        currentSway = Mathf.MoveTowards(currentSway, targetSway, swayFollowSpeed * Time.deltaTime);
+
+        float tiltMultiplier = isFocusing ? focusedTiltMultiplier : 1f;
+        float tiltRatio = amplitude <= 0.01f ? 0f : Mathf.Clamp(currentSway / amplitude, -1f, 1f);
+        float roll = -tiltRatio * maxRollAngle * distractionProgress * tiltMultiplier;
+        float yaw = Mathf.Cos(elapsed * swayFrequency * Mathf.PI * 2f) * maxYawAngle * distractionProgress * tiltMultiplier;
 
         if (boat != null)
         {
-            boat.position = new Vector3(x, startPosition.y, startPosition.z + sway);
+            boat.position = new Vector3(x, startPosition.y, startPosition.z + currentSway);
             boat.rotation = Quaternion.Euler(0f, yaw, roll);
         }
 

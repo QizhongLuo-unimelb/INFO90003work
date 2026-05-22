@@ -56,7 +56,11 @@ MonoBehaviour:
   endSwayAmplitude: 2.8
   distractionReachSeconds: 15
   swayFrequency: 0.25
-  maxRollAngle: 24
-  maxYawAngle: 12
+  maxRollAngle: 14
+  maxYawAngle: 8
+  focusKey: 109
+  focusReturnSpeed: 6
+  normalSwayFollowSpeed: 4
+  focusedTiltMultiplier: 0.25
   returnSceneName: Main game
   returnDelay: 2
