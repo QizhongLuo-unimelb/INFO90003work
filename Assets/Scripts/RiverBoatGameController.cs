@@ -29,6 +29,7 @@ public class RiverBoatGameController : MonoBehaviour
     public float focusReturnSpeed = 6f;
     public float normalSwayFollowSpeed = 4f;
     public float focusedTiltMultiplier = 0.25f;
+    public float externalFocusSeconds = 0.7f;
 
     [Header("Finish")]
     public string returnSceneName = "Main game";
@@ -37,7 +38,19 @@ public class RiverBoatGameController : MonoBehaviour
     float elapsed;
     float finishElapsed;
     float currentSway;
+    float externalFocusUntil;
     bool finished;
+    bool touchedShore;
+
+    public bool HasFinished
+    {
+        get { return finished; }
+    }
+
+    public bool TouchedShore
+    {
+        get { return touchedShore; }
+    }
 
     void Awake()
     {
@@ -68,11 +81,6 @@ public class RiverBoatGameController : MonoBehaviour
         if (finished)
         {
             finishElapsed += Time.deltaTime;
-            if (finishElapsed >= returnDelay)
-            {
-                SceneManager.LoadScene(returnSceneName);
-            }
-
             return;
         }
 
@@ -83,7 +91,7 @@ public class RiverBoatGameController : MonoBehaviour
         float distractionProgress = Mathf.Clamp01(elapsed / Mathf.Max(0.01f, distractionReachSeconds));
         float amplitude = Mathf.Lerp(startSwayAmplitude, endSwayAmplitude, distractionProgress);
         float swayWave = Mathf.Sin(elapsed * swayFrequency * Mathf.PI * 2f);
-        bool isFocusing = Input.GetKey(focusKey);
+        bool isFocusing = Input.GetKey(focusKey) || Time.time < externalFocusUntil;
         float targetSway = isFocusing ? 0f : swayWave * amplitude;
         float swayFollowSpeed = isFocusing ? focusReturnSpeed : normalSwayFollowSpeed;
 
@@ -115,7 +123,13 @@ public class RiverBoatGameController : MonoBehaviour
             return;
         }
 
+        touchedShore = true;
         Finish("distraction");
+    }
+
+    public void FocusForSeconds()
+    {
+        externalFocusUntil = Time.time + externalFocusSeconds;
     }
 
     void Finish(string message)

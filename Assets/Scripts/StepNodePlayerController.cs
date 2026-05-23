@@ -21,6 +21,7 @@ public class StepNodePlayerController : MonoBehaviour
     private StepNode targetNode;
     private bool isMoving = false;
     private StepNode[] allNodes;
+    private MazeRunResultTracker resultTracker;
     private Vector3 moveTargetPosition;
     private static readonly KeyCode[] nodeHotkeys =
     {
@@ -43,6 +44,12 @@ public class StepNodePlayerController : MonoBehaviour
     void Start()
     {
         allNodes = FindObjectsOfType<StepNode>();
+        resultTracker = GetComponent<MazeRunResultTracker>();
+
+        if (resultTracker == null)
+        {
+            resultTracker = gameObject.AddComponent<MazeRunResultTracker>();
+        }
 
         if (adjacencyDetector == null)
         {
@@ -264,6 +271,11 @@ public class StepNodePlayerController : MonoBehaviour
         targetNode = null;
         isMoving = false;
 
+        if (resultTracker != null)
+        {
+            resultTracker.RecordNodeArrival(currentNode);
+        }
+
         ShowNodeMessage();
         currentNode.SendMessage("OnPlayerArrived", this, SendMessageOptions.DontRequireReceiver);
     }
@@ -275,13 +287,27 @@ public class StepNodePlayerController : MonoBehaviour
 
     void ShowNodeMessage()
     {
-        if (notificationUI != null && currentNode != null)
+        if (currentNode == null)
+        {
+            return;
+        }
+
+        bool showedMessage = false;
+
+        if (notificationUI != null)
         {
             notificationUI.Show(currentNode);
+            showedMessage = true;
         }
-        else if (messageText != null && currentNode != null)
+        else if (messageText != null)
         {
-            messageText.text = currentNode.nodeMessage;
+            messageText.text = currentNode.GetNodeMessageForTrigger();
+            showedMessage = true;
+        }
+
+        if (showedMessage)
+        {
+            currentNode.MarkTriggered();
         }
     }
 

@@ -66,11 +66,13 @@ public class NotificationUIController : MonoBehaviour
         }
 
         NotificationKind kind = ResolveKind(node);
-        string title = string.IsNullOrWhiteSpace(node.notificationTitle)
+        string notificationTitle = node.GetNotificationTitleForTrigger();
+        string nodeMessage = node.GetNodeMessageForTrigger();
+        string title = string.IsNullOrWhiteSpace(notificationTitle)
             ? GetDefaultTitle(kind)
-            : node.notificationTitle;
+            : notificationTitle;
 
-        ShowNotification(title, CleanMessage(node.nodeMessage), kind);
+        ShowNotification(title, CleanMessage(nodeMessage), kind);
     }
 
     public void ShowSystemMessage(string title, string message)
@@ -120,7 +122,7 @@ public class NotificationUIController : MonoBehaviour
             return node.notificationKind;
         }
 
-        string source = (node.name + " " + node.nodeMessage).ToLowerInvariant();
+        string source = (node.name + " " + node.GetNodeMessageForTrigger()).ToLowerInvariant();
 
         if (source.Contains("email") || source.Contains("gmail"))
         {

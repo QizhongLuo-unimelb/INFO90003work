@@ -115,12 +115,6 @@ public class ArduinoSerialInput : MonoBehaviour
             player = FindObjectOfType<StepNodePlayerController>();
         }
 
-        if (player == null)
-        {
-            Debug.LogWarning("Arduino input received, but no StepNodePlayerController was found.");
-            return;
-        }
-
         char inputLetter = input.Trim().ToLowerInvariant()[0];
 
         if (inputLetter < 'a' || inputLetter > 'n')
@@ -129,7 +123,51 @@ public class ArduinoSerialInput : MonoBehaviour
             return;
         }
 
-        player.TryMoveToInputLetter(inputLetter);
+        if (player != null)
+        {
+            player.TryMoveToInputLetter(inputLetter);
+            return;
+        }
+
+        if (!TryHandleSceneInput(inputLetter))
+        {
+            Debug.LogWarning("Arduino input received, but no scene handler was found for: " + inputLetter);
+        }
+    }
+
+    bool TryHandleSceneInput(char inputLetter)
+    {
+        if (inputLetter == 'l')
+        {
+            TestMailInteractionController mailController = FindObjectOfType<TestMailInteractionController>();
+            if (mailController != null)
+            {
+                mailController.TriggerClearMail();
+                return true;
+            }
+        }
+
+        if (inputLetter == 'm')
+        {
+            RiverBoatGameController boatController = FindObjectOfType<RiverBoatGameController>();
+            if (boatController != null)
+            {
+                boatController.FocusForSeconds();
+                return true;
+            }
+        }
+
+        if (inputLetter == 'n')
+        {
+            PhotoNotificationPreviewController previewController = FindObjectOfType<PhotoNotificationPreviewController>();
+            if (previewController != null)
+            {
+                previewController.PreviewForSeconds();
+                return true;
+            }
+        }
+
+        return false;
     }
 
     void OnApplicationQuit()

@@ -71,6 +71,8 @@ public class ShoppingInformationDistraction : MonoBehaviour
     float spawnTimer;
     int nextBankIndex;
 
+    public int SpawnedCount { get; private set; }
+
     void Awake()
     {
         whiteSprite = Sprite.Create(Texture2D.whiteTexture, new Rect(0f, 0f, 1f, 1f), Vector2.one * 0.5f);
@@ -113,6 +115,7 @@ public class ShoppingInformationDistraction : MonoBehaviour
         float originalPrice = Mathf.Round((dollars * Random.Range(1.35f, 2.1f)) * 100f) / 100f;
 
         BuildPopupUi(popup.transform, seller, product, discount, dollars, cents, originalPrice);
+        SpawnedCount++;
 
         ShoppingPopupMotion motion = popup.AddComponent<ShoppingPopupMotion>();
         motion.Lifetime = messageLifetime;

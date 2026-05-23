@@ -45,14 +45,13 @@ public class NodeScenePortal : MonoBehaviour
             return;
         }
 
-        SaveReturnPoint();
-        SceneManager.LoadScene(targetSceneName);
-    }
+        if (!GameRunState.CanEnterBranch(targetSceneName))
+        {
+            return;
+        }
 
-    void SaveReturnPoint()
-    {
-        PlayerPrefs.SetString("ReturnSceneName", currentSceneName);
-        PlayerPrefs.SetString("ReturnNodeName", returnNodeName);
-        PlayerPrefs.Save();
+        GameRunState.SaveReturnPoint(currentSceneName, returnNodeName);
+        GameRunState.MarkBranchEntered(targetSceneName);
+        SceneManager.LoadScene(targetSceneName);
     }
 }

@@ -5,24 +5,24 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 07317880ca66a4e7fa36d256f519cc6c
+  - enabled: 1
+    path: Assets/Scenes/Begin.unity
+    guid: 754625f983fe24020b6b0dd46688606f
   - enabled: 1
     path: Assets/Scenes/Main game.unity
     guid: ff8f11ecf72444d37aa7e31f51ab6f78
   - enabled: 1
-    path: Assets/Scenes/test2.unity
-    guid: b68b8499b8b2e48b69ff590addcdb5ae
-  - enabled: 1
-    path: Assets/Scenes/Game.unity
-    guid: de49ea5db23284c31bec11680e6b71bb
-  - enabled: 1
     path: Assets/Scenes/Email.unity
-    guid: 74e93c6bcffd546f9b906bb6e48856ff
+    guid: e6917d674589a476fb29e63498fc2993
   - enabled: 1
     path: Assets/Scenes/Shopping.unity
-    guid: 1f2e6f4da1b894a55b663871235f0455
+    guid: b68b8499b8b2e48b69ff590addcdb5ae
+  - enabled: 1
+    path: Assets/Scenes/Ins.unity
+    guid: 9bd76a721ef3c4e278c1f3a4974ae5a2
+  - enabled: 1
+    path: Assets/Scenes/End.unity
+    guid: a200370d841f24c7a8b31fc196228f4f
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

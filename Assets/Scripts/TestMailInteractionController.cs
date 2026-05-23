@@ -44,13 +44,9 @@ public class TestMailInteractionController : MonoBehaviour
             popupUI = TestMailPopupUI.Instance;
         }
 
-        if (Input.GetKeyDown(clearMailKey) && popupUI != null)
+        if (Input.GetKeyDown(clearMailKey))
         {
-            int readNow = popupUI.MarkVisibleAsRead();
-            if (experienceController != null)
-            {
-                experienceController.ApplyReadRelief(readNow);
-            }
+            TriggerClearMail();
         }
 
         remainingSeconds = Mathf.Max(0f, remainingSeconds - Time.deltaTime);
@@ -59,7 +55,31 @@ public class TestMailInteractionController : MonoBehaviour
         if (!loadingScene && remainingSeconds <= 0f)
         {
             loadingScene = true;
-            SceneManager.LoadScene(returnSceneName);
+            if (popupUI != null)
+            {
+                GameRunState.SaveEmailStats(popupUI.TotalSpawned, popupUI.ActiveCount, popupUI.ReadCount, popupUI.UnreadCount);
+            }
+
+            GameRunState.ReturnToMainFromBranch(SceneManager.GetActiveScene().name, countdownSeconds);
+        }
+    }
+
+    public void TriggerClearMail()
+    {
+        if (popupUI == null)
+        {
+            popupUI = TestMailPopupUI.Instance;
+        }
+
+        if (popupUI == null)
+        {
+            return;
+        }
+
+        int readNow = popupUI.MarkVisibleAsRead();
+        if (experienceController != null)
+        {
+            experienceController.ApplyReadRelief(readNow);
         }
     }
 
