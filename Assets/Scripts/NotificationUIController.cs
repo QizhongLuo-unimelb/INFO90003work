@@ -4,18 +4,18 @@ using UnityEngine.UI;
 
 public class NotificationUIController : MonoBehaviour
 {
-    const float PanelMinWidth = 520f;
-    const float PanelMaxWidth = 900f;
-    const float PanelMinHeight = 132f;
-    const float PanelMaxHeight = 360f;
-    const float HorizontalPadding = 46f;
-    const float HeaderHeight = 64f;
-    const float BodyTopPadding = 22f;
-    const float BottomPadding = 28f;
-    const float IconSize = 38f;
-    const float IconTitleGap = 14f;
-    const float BorderThickness = 8f;
-    const float HeaderDividerThickness = 4f;
+    const float PanelMinWidth = 720f;
+    const float PanelMaxWidth = 1180f;
+    const float PanelMinHeight = 190f;
+    const float PanelMaxHeight = 520f;
+    const float HorizontalPadding = 62f;
+    const float HeaderHeight = 86f;
+    const float BodyTopPadding = 30f;
+    const float BottomPadding = 38f;
+    const float IconSize = 52f;
+    const float IconTitleGap = 20f;
+    const float BorderThickness = 12f;
+    const float HeaderDividerThickness = 6f;
 
     static readonly Color MinecraftWoodColor = new Color(0.72f, 0.42f, 0.18f, 0.96f);
     static readonly Color MinecraftWoodDarkColor = new Color(0.18f, 0.09f, 0.035f, 1f);
@@ -199,8 +199,8 @@ public class NotificationUIController : MonoBehaviour
     {
         LoadMinecraftFont();
         EnsureWoodFrame();
-        ConfigureText(titleText, TextAlignmentOptions.MidlineLeft, TextWrappingModes.NoWrap, 30f, 0f);
-        ConfigureText(messageText, TextAlignmentOptions.Top, TextWrappingModes.Normal, 32f, -4f);
+        ConfigureText(titleText, TextAlignmentOptions.MidlineLeft, TextWrappingModes.NoWrap, 44f, 0f);
+        ConfigureText(messageText, TextAlignmentOptions.TopLeft, TextWrappingModes.Normal, 46f, -2f);
         ConfigureText(timeText, TextAlignmentOptions.Center, TextWrappingModes.NoWrap, 1f, 0f);
 
         Vector2 panelSize = CalculatePanelSize();

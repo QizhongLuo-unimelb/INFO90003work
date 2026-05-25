@@ -123,7 +123,6 @@ public class StepNodePlayerController : MonoBehaviour
 
         if (hotkeyIndex < 0 || hotkeyIndex >= nodeHotkeys.Length)
         {
-            ShowCannotMoveMessage();
             return;
         }
 
@@ -146,13 +145,11 @@ public class StepNodePlayerController : MonoBehaviour
 
         if (nextNode == null)
         {
-            ShowCannotMoveMessage();
             return;
         }
 
         if (adjacencyDetector != null && !adjacencyDetector.IsAdjacent(currentNode, nextNode))
         {
-            ShowCannotMoveMessage();
             return;
         }
 
@@ -206,7 +203,6 @@ public class StepNodePlayerController : MonoBehaviour
     {
         if (nextNode == null)
         {
-            ShowCannotMoveMessage();
             return;
         }
 
@@ -308,18 +304,6 @@ public class StepNodePlayerController : MonoBehaviour
         if (showedMessage)
         {
             currentNode.MarkTriggered();
-        }
-    }
-
-    void ShowCannotMoveMessage()
-    {
-        if (notificationUI != null)
-        {
-            notificationUI.ShowSystemMessage("Maze", "You cannot go that way.");
-        }
-        else if (messageText != null)
-        {
-            messageText.text = "You cannot go that way.";
         }
     }
 }

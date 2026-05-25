@@ -6,15 +6,14 @@ using UnityEngine.UI;
 public class GameSceneFlowController : MonoBehaviour
 {
     const float BranchDuration = 30f;
-    const float EndDuration = 20f;
+    const float EndDuration = 15f;
 
     static GameSceneFlowController instance;
     static bool playSessionInitialized;
 
     string activeSceneName;
     float sceneTimer;
-    TextMeshProUGUI labelText;
-    TextMeshProUGUI timerText;
+    EndSceneMinecraftUI endSceneUI;
     bool isReturning;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -96,7 +95,10 @@ public class GameSceneFlowController : MonoBehaviour
         if (IsEndScene())
         {
             sceneTimer += Time.deltaTime;
-            UpdateTimer(EndDuration - sceneTimer);
+            if (endSceneUI != null)
+            {
+                endSceneUI.UpdateDisplay(sceneTimer, EndDuration);
+            }
 
             if (sceneTimer >= EndDuration)
             {
@@ -120,13 +122,35 @@ public class GameSceneFlowController : MonoBehaviour
 
         if (IsBeginScene())
         {
-            BuildCenteredCanvas("Press any button to begin", "");
             return;
         }
 
         if (IsEndScene())
         {
-            BuildCenteredCanvas(GameRunState.BuildEndSummary(), "");
+            endSceneUI = FindObjectOfType<EndSceneMinecraftUI>();
+            if (endSceneUI != null)
+            {
+                endSceneUI.SetSummary(GameRunState.BuildEndSummary());
+                endSceneUI.UpdateDisplay(0f, EndDuration);
+            }
+            return;
+        }
+
+        if (activeSceneName == "Ins")
+        {
+            BuildBranchCanvas(
+                "Reading Flow Interrupted by App Notifications",
+                "Press the entrance button of this zone to See the photo",
+                true);
+            return;
+        }
+
+        if (activeSceneName == "Shopping")
+        {
+            BuildBranchCanvas(
+                "A Mind Ship Distracted by Website Shopping Notifications",
+                "Press the entrance button of this zone to Keep the ship in the middle",
+                false);
             return;
         }
     }
@@ -194,36 +218,6 @@ public class GameSceneFlowController : MonoBehaviour
         }
     }
 
-    void BuildCenteredCanvas(string mainText, string secondaryText)
-    {
-        GameObject canvasObject = CreateCanvas("Flow Center Canvas");
-        GameObject panelObject = new GameObject("Flow Panel", typeof(RectTransform));
-        RectTransform panelRect = panelObject.GetComponent<RectTransform>();
-        panelRect.SetParent(canvasObject.transform, false);
-        panelRect.anchorMin = new Vector2(0.5f, 0.5f);
-        panelRect.anchorMax = new Vector2(0.5f, 0.5f);
-        panelRect.pivot = new Vector2(0.5f, 0.5f);
-        panelRect.anchoredPosition = Vector2.zero;
-        panelRect.sizeDelta = new Vector2(920f, 680f);
-
-        Image panelImage = panelObject.AddComponent<Image>();
-        panelImage.color = new Color(0.04f, 0.05f, 0.06f, 0.82f);
-        panelImage.raycastTarget = false;
-
-        labelText = AddText(panelRect, "Flow Label", mainText, 42f, TextAlignmentOptions.Center);
-        labelText.rectTransform.anchorMin = Vector2.zero;
-        labelText.rectTransform.anchorMax = Vector2.one;
-        labelText.rectTransform.offsetMin = new Vector2(60f, 80f);
-        labelText.rectTransform.offsetMax = new Vector2(-60f, -80f);
-
-        timerText = AddText(panelRect, "Flow Timer", secondaryText, 28f, TextAlignmentOptions.Center);
-        timerText.rectTransform.anchorMin = new Vector2(0f, 0f);
-        timerText.rectTransform.anchorMax = new Vector2(1f, 0f);
-        timerText.rectTransform.pivot = new Vector2(0.5f, 0f);
-        timerText.rectTransform.anchoredPosition = new Vector2(0f, 26f);
-        timerText.rectTransform.sizeDelta = new Vector2(0f, 44f);
-    }
-
     GameObject CreateCanvas(string canvasName)
     {
         GameObject canvasObject = new GameObject(canvasName, typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
@@ -254,14 +248,78 @@ public class GameSceneFlowController : MonoBehaviour
         return text;
     }
 
-    void UpdateTimer(float remainingSeconds)
+    void BuildBranchCanvas(string title, string prompt, bool placeTitleOnRight)
     {
-        if (timerText == null)
+        GameObject canvasObject = CreateCanvas("Flow Branch UI Canvas");
+
+        BuildBranchTitle(canvasObject.transform, title, placeTitleOnRight);
+        BuildLeftPrompt(canvasObject.transform, prompt);
+    }
+
+    void BuildBranchTitle(Transform parent, string title, bool placeOnRight)
+    {
+        TextMeshProUGUI titleText = AddText(parent, "Branch Title", title, placeOnRight ? 32f : 38f, TextAlignmentOptions.Center);
+        titleText.fontStyle = FontStyles.Bold;
+        titleText.color = Color.white;
+        titleText.raycastTarget = false;
+        titleText.textWrappingMode = TextWrappingModes.Normal;
+
+        if (placeOnRight)
         {
+            titleText.rectTransform.anchorMin = new Vector2(1f, 1f);
+            titleText.rectTransform.anchorMax = new Vector2(1f, 1f);
+            titleText.rectTransform.pivot = new Vector2(1f, 1f);
+            titleText.rectTransform.anchoredPosition = new Vector2(-36f, -280f);
+            titleText.rectTransform.sizeDelta = new Vector2(420f, 160f);
             return;
         }
 
-        timerText.text = Mathf.CeilToInt(Mathf.Max(0f, remainingSeconds)).ToString("00") + "s";
+        titleText.rectTransform.anchorMin = new Vector2(0.5f, 1f);
+        titleText.rectTransform.anchorMax = new Vector2(0.5f, 1f);
+        titleText.rectTransform.pivot = new Vector2(0.5f, 1f);
+        titleText.rectTransform.anchoredPosition = new Vector2(220f, -28f);
+        titleText.rectTransform.sizeDelta = new Vector2(860f, 96f);
+    }
+
+    void BuildLeftPrompt(Transform parent, string prompt)
+    {
+        GameObject promptObject = new GameObject("Zone Action Prompt", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        promptObject.transform.SetParent(parent, false);
+
+        RectTransform promptRect = promptObject.GetComponent<RectTransform>();
+        promptRect.anchorMin = new Vector2(0f, 1f);
+        promptRect.anchorMax = new Vector2(0f, 1f);
+        promptRect.pivot = new Vector2(0f, 1f);
+        promptRect.anchoredPosition = new Vector2(32f, -24f);
+        promptRect.sizeDelta = new Vector2(620f, 82f);
+
+        Image promptImage = promptObject.GetComponent<Image>();
+        promptImage.color = new Color(0.06f, 0.075f, 0.095f, 0.9f);
+        promptImage.raycastTarget = false;
+
+        GameObject accentObject = new GameObject("Prompt Accent", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        accentObject.transform.SetParent(promptObject.transform, false);
+
+        RectTransform accentRect = accentObject.GetComponent<RectTransform>();
+        accentRect.anchorMin = new Vector2(0f, 0f);
+        accentRect.anchorMax = new Vector2(0f, 1f);
+        accentRect.pivot = new Vector2(0f, 0.5f);
+        accentRect.anchoredPosition = Vector2.zero;
+        accentRect.sizeDelta = new Vector2(6f, 0f);
+
+        Image accentImage = accentObject.GetComponent<Image>();
+        accentImage.color = new Color(0.58f, 0.66f, 0.76f, 1f);
+        accentImage.raycastTarget = false;
+
+        TextMeshProUGUI promptText = AddText(promptRect, "Prompt Text", prompt, 26f, TextAlignmentOptions.MidlineLeft);
+        promptText.color = new Color(0.94f, 0.96f, 0.98f, 1f);
+        promptText.fontStyle = FontStyles.Normal;
+        promptText.textWrappingMode = TextWrappingModes.Normal;
+        promptText.raycastTarget = false;
+        promptText.rectTransform.anchorMin = Vector2.zero;
+        promptText.rectTransform.anchorMax = Vector2.one;
+        promptText.rectTransform.offsetMin = new Vector2(26f, 8f);
+        promptText.rectTransform.offsetMax = new Vector2(-24f, -8f);
     }
 
     void DestroyFlowCanvas()
@@ -275,7 +333,6 @@ public class GameSceneFlowController : MonoBehaviour
             }
         }
 
-        labelText = null;
-        timerText = null;
+        endSceneUI = null;
     }
 }
