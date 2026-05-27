@@ -39,15 +39,21 @@ public class NotificationUIController : MonoBehaviour
     public Sprite shoppingIcon;
     public Sprite defaultIcon;
 
+    [Header("Audio")]
+    public AudioClip notificationSound;
+    public float notificationVolume = 0.75f;
+
     Image backgroundImage;
     RectTransform topBorder;
     RectTransform bottomBorder;
     RectTransform leftBorder;
     RectTransform rightBorder;
     RectTransform plankLine;
+    AudioSource audioSource;
 
     void Awake()
     {
+        EnsureAudioSource();
         LoadMinecraftFont();
         ApplyLayout();
     }
@@ -113,6 +119,7 @@ public class NotificationUIController : MonoBehaviour
         }
 
         ApplyLayout();
+        PlayNotificationSound();
     }
 
     NotificationKind ResolveKind(StepNode node)
@@ -192,6 +199,38 @@ public class NotificationUIController : MonoBehaviour
                 return shoppingIcon != null ? shoppingIcon : defaultIcon;
             default:
                 return defaultIcon;
+        }
+    }
+
+    void EnsureAudioSource()
+    {
+        if (audioSource != null)
+        {
+            return;
+        }
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 0f;
+
+        if (notificationSound == null)
+        {
+            notificationSound = Resources.Load<AudioClip>("Audio/iOSLikeNotification");
+        }
+    }
+
+    void PlayNotificationSound()
+    {
+        EnsureAudioSource();
+
+        if (audioSource != null && notificationSound != null)
+        {
+            audioSource.PlayOneShot(notificationSound, notificationVolume);
         }
     }
 

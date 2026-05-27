@@ -248,9 +248,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StepNode
   notificationKind: 0
   notificationTitle: 
-  nodeMessage: happy shopping!
+  nodeMessage: How long did you keep the ship in the middle of the river?
   repeatedNotificationTitle: 
-  repeatedNodeMessage: 
+  repeatedNodeMessage: You have visited this zone...
 --- !u!114 &64894329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,9 +410,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StepNode
   notificationKind: 0
   notificationTitle: 
-  nodeMessage: Hello! Happy Email!
+  nodeMessage: Did you keep your tree "alive" under the distraction?
   repeatedNotificationTitle: 
-  repeatedNodeMessage: 
+  repeatedNodeMessage: You have visited this zone...
 --- !u!114 &101044692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -675,53 +675,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &529277330
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 529277332}
-  - component: {fileID: 529277331}
-  m_Layer: 0
-  m_Name: ArduinoInputManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &529277331
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 529277330}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5b32ac4ace3544239d8f8cfeb8a0511, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  portName: /dev/cu.usbmodem101
-  baudRate: 9600
-  player: {fileID: 0}
---- !u!4 &529277332
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 529277330}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4, y: -0.95, z: 3.925}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &547187161
 GameObject:
   m_ObjectHideFlags: 0
@@ -1111,7 +1064,7 @@ MonoBehaviour:
   notificationTitle: 
   nodeMessage: Do you still remember the article you "read" in the zone? Or the pictures?
   repeatedNotificationTitle: 
-  repeatedNodeMessage: 
+  repeatedNodeMessage: You have visited this zone...
 --- !u!114 &652577499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1641,7 +1594,7 @@ MonoBehaviour:
   m_text: New Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 1111179461}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 1111179461}
   m_fontMaterials: []
@@ -2787,6 +2740,8 @@ MonoBehaviour:
   gameIcon: {fileID: 21300000, guid: 7b8355c561b24370ba53ac230b88e88c, type: 3}
   shoppingIcon: {fileID: 21300000, guid: ec7bfe581f264785a4522bed95898aa8, type: 3}
   defaultIcon: {fileID: 21300000, guid: 85e0e2de9552415298100ad742f6ebf2, type: 3}
+  notificationSound: {fileID: 8300000, guid: 1e22c03d0a9145eba43c0174e4d5f75a, type: 3}
+  notificationVolume: 0.75
 --- !u!1 &1566035114
 GameObject:
   m_ObjectHideFlags: 0
@@ -7597,7 +7552,7 @@ MonoBehaviour:
   m_text: Messages
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 783957116}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 783957116}
   m_fontMaterials: []
@@ -7817,4 +7772,3 @@ SceneRoots:
   - {fileID: 1097818403}
   - {fileID: 1433805512}
   - {fileID: 1566035115}
-  - {fileID: 529277332}

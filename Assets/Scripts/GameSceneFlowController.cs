@@ -7,12 +7,14 @@ public class GameSceneFlowController : MonoBehaviour
 {
     const float BranchDuration = 30f;
     const float EndDuration = 15f;
+    const float ShoppingDistractionReturnDelay = 3f;
 
     static GameSceneFlowController instance;
     static bool playSessionInitialized;
 
     string activeSceneName;
     float sceneTimer;
+    float shoppingDistractionTimer;
     EndSceneMinecraftUI endSceneUI;
     bool isReturning;
 
@@ -82,11 +84,22 @@ public class GameSceneFlowController : MonoBehaviour
         {
             sceneTimer += Time.deltaTime;
 
+            if (ShouldReturnAfterShoppingDistraction())
+            {
+                shoppingDistractionTimer += Time.deltaTime;
+                if (shoppingDistractionTimer >= ShoppingDistractionReturnDelay)
+                {
+                    ReturnFromActiveBranch();
+                }
+            }
+            else
+            {
+                shoppingDistractionTimer = 0f;
+            }
+
             if (!isReturning && sceneTimer >= BranchDuration)
             {
-                isReturning = true;
-                SaveActiveSceneStats();
-                GameRunState.ReturnToMainFromBranch(activeSceneName, sceneTimer);
+                ReturnFromActiveBranch();
             }
 
             return;
@@ -117,6 +130,7 @@ public class GameSceneFlowController : MonoBehaviour
         activeSceneName = scene.name;
         InitializePlaySessionIfNeeded(activeSceneName);
         sceneTimer = 0f;
+        shoppingDistractionTimer = 0f;
         isReturning = false;
         DestroyFlowCanvas();
 
@@ -184,6 +198,29 @@ public class GameSceneFlowController : MonoBehaviour
     bool IsBranchScene()
     {
         return activeSceneName == "Email" || activeSceneName == "Shopping" || activeSceneName == "Ins";
+    }
+
+    bool ShouldReturnAfterShoppingDistraction()
+    {
+        if (isReturning || activeSceneName != "Shopping")
+        {
+            return false;
+        }
+
+        RiverBoatGameController boat = FindFirstObjectByType<RiverBoatGameController>();
+        return boat != null && boat.TouchedShore;
+    }
+
+    void ReturnFromActiveBranch()
+    {
+        if (isReturning)
+        {
+            return;
+        }
+
+        isReturning = true;
+        SaveActiveSceneStats();
+        GameRunState.ReturnToMainFromBranch(activeSceneName, sceneTimer);
     }
 
     void SaveActiveSceneStats()
