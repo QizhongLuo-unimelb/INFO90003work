@@ -640,6 +640,7 @@ GameObject:
   m_Component:
   - component: {fileID: 383321198}
   - component: {fileID: 383321197}
+  - component: {fileID: 383321199}
   m_Layer: 0
   m_Name: ArduinoSerialManager
   m_TagString: Untagged
@@ -662,6 +663,25 @@ MonoBehaviour:
   portName: /dev/cu.usbmodem101
   baudRate: 9600
   player: {fileID: 0}
+--- !u!114 &383321199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 383321196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8cd7d20f1da4b8caed48f57fc8ddc34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RunCounterManager
+  mainMazeRotated: 0
+  mainMazeRotationCount: 0
+  emailVisited: 0
+  shoppingVisited: 0
+  insVisited: 0
+  visitedBranchCount: 0
+  keepSynced: 1
 --- !u!4 &383321198
 Transform:
   m_ObjectHideFlags: 0

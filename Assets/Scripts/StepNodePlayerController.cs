@@ -23,6 +23,7 @@ public class StepNodePlayerController : MonoBehaviour
     private StepNode[] allNodes;
     private MazeRunResultTracker resultTracker;
     private Vector3 moveTargetPosition;
+    private bool suppressInitialNodeMessage;
     private static readonly KeyCode[] nodeHotkeys =
     {
         KeyCode.A,
@@ -70,6 +71,7 @@ public class StepNodePlayerController : MonoBehaviour
             if (returnNode != null)
             {
                 currentNode = returnNode;
+                suppressInitialNodeMessage = IsPortalReturnNode(returnNode);
                 PlayerPrefs.DeleteKey("ReturnNodeName");
                 PlayerPrefs.DeleteKey("ReturnSceneName");
                 PlayerPrefs.Save();
@@ -79,7 +81,15 @@ public class StepNodePlayerController : MonoBehaviour
         if (currentNode != null)
         {
             transform.position = GetPlayerPosition(currentNode);
-            ShowNodeMessage();
+
+            if (!suppressInitialNodeMessage)
+            {
+                ShowNodeMessage();
+            }
+            else
+            {
+                ShowPortalReturnMessage();
+            }
         }
     }
 
@@ -304,6 +314,25 @@ public class StepNodePlayerController : MonoBehaviour
         if (showedMessage)
         {
             currentNode.MarkTriggered();
+        }
+    }
+
+    bool IsPortalReturnNode(StepNode node)
+    {
+        return node != null && node.GetComponent<NodeScenePortal>() != null;
+    }
+
+    void ShowPortalReturnMessage()
+    {
+        if (notificationUI != null)
+        {
+            notificationUI.ShowInitial(currentNode);
+            return;
+        }
+
+        if (messageText != null)
+        {
+            messageText.text = currentNode.GetInitialNodeMessage();
         }
     }
 }

@@ -180,8 +180,7 @@ public class GameSceneFlowController : MonoBehaviour
 
         if (sceneName == GameRunState.MainSceneName)
         {
-            GameRunState.ResetRun();
-            GameRunState.BeginRun();
+            GameRunState.EnsureRunStarted();
         }
     }
 

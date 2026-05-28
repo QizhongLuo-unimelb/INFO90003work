@@ -81,9 +81,54 @@ public class NotificationUIController : MonoBehaviour
         ShowNotification(title, CleanMessage(nodeMessage), kind);
     }
 
+    public void ShowInitial(StepNode node)
+    {
+        if (node == null)
+        {
+            return;
+        }
+
+        string nodeMessage = node.GetInitialNodeMessage();
+        NotificationKind kind = ResolveKind(node, nodeMessage);
+        string notificationTitle = node.GetInitialNotificationTitle();
+        string title = string.IsNullOrWhiteSpace(notificationTitle)
+            ? GetDefaultTitle(kind)
+            : notificationTitle;
+
+        ShowNotification(title, CleanMessage(nodeMessage), kind);
+    }
+
     public void ShowSystemMessage(string title, string message)
     {
         ShowNotification(title, message, NotificationKind.System);
+    }
+
+    public void Hide()
+    {
+        if (titleText != null)
+        {
+            titleText.text = "";
+        }
+
+        if (messageText != null)
+        {
+            messageText.text = "";
+        }
+
+        if (timeText != null)
+        {
+            timeText.text = "";
+        }
+
+        if (iconImage != null)
+        {
+            iconImage.enabled = false;
+        }
+
+        if (notificationPanel != null)
+        {
+            notificationPanel.gameObject.SetActive(false);
+        }
     }
 
     void ShowNotification(string title, string message, NotificationKind kind)
@@ -124,12 +169,17 @@ public class NotificationUIController : MonoBehaviour
 
     NotificationKind ResolveKind(StepNode node)
     {
+        return ResolveKind(node, node.GetNodeMessageForTrigger());
+    }
+
+    NotificationKind ResolveKind(StepNode node, string nodeMessage)
+    {
         if (node.notificationKind != NotificationKind.Auto)
         {
             return node.notificationKind;
         }
 
-        string source = (node.name + " " + node.GetNodeMessageForTrigger()).ToLowerInvariant();
+        string source = (node.name + " " + nodeMessage).ToLowerInvariant();
 
         if (source.Contains("email") || source.Contains("gmail"))
         {
